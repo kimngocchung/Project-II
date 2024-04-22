@@ -1,62 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login form</title>
-    <link rel="stylesheet" href="/assets/login.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="/login/assets/login.css">
 </head>
+
 <body>
     <div class="container">
         <h1 class="label">Đăng nhập</h1>
         <form class="login_form" action="" method="POST">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
-            
+
             <label for="password">Mật khẩu</label>
             <input type="password" id="password" name="password" required>
 
-            <div id="error" style="display: none; color: red;"></div> 
+            <div id="error" style="display: none; color: red;"></div>
 
             <button type="submit">Đăng nhập</button>
         </form>
     </div>
 
     <script>
-    const loginForm = document.querySelector('.login_form');
-    const passwordErrorDiv = document.getElementById('error'); // Thay đổi ID cho phù hợp
+        const loginForm = document.querySelector('.login_form');
+        const passwordErrorDiv = document.getElementById('error'); // Thay đổi ID cho phù hợp
 
-    loginForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Ngăn form submit mặc định
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn form submit mặc định
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-    // Gửi yêu cầu POST dạng AJAX
-    fetch('/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-            email: email,
-            password: password
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            passwordErrorDiv.textContent = data.error;
-            passwordErrorDiv.style.display = 'block';
-        } else if (data.success) {
-            // Xử lý đăng nhập thành công
-            window.location.href = '/home';
-        } else {
-            console.error('Lỗi không xác định');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
+            // Gửi yêu cầu POST dạng AJAX
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    email: email,
+                    password: password
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        passwordErrorDiv.textContent = data.error;
+                        passwordErrorDiv.style.display = 'block';
+                    } else if (data.success) {
+                        // Xử lý đăng nhập thành công
+                        if (data.userType === 'student') {
+                            window.location.href = '/homepagestudent/homestudent';
+                        } else if (data.userType === 'teacher') {
+                            window.location.href = '/homepageteacher/hometeacher';
+                        }
+                    } else {
+                        console.error('Lỗi không xác định');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
     </script>
 </body>
+
 </html>
