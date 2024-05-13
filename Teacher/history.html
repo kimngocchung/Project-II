@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý lịch hẹn</title>
+    <link rel="stylesheet" href="/Teacher/assets/history.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div id="menu-container"></div>
+        <div class="right-panel">
+            <nav class="navigation">
+                <i class="bi bi-list"></i>
+                <a href="/"><i class="bi bi-box-arrow-right"></i></a>
+            </nav>
+            <div class="home-link-container">
+                <a href="" class="home-link">Lịch sử cuộc hẹn</a>
+            </div>
+            <div class="appointment-container">
+                <div class="list-appointment">
+                    <p id="appointment-title">Họp cá nhân: </p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên thành viên</th>
+                            <th>Nhóm đề tài</th>
+                            <th>Ngày hẹn</th>
+                            <th>Thời gian bắt đầu</th>
+                            <th>Thời gian kết thúc</th>
+                            <th>Địa điểm</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentTableBody">
+                        <!-- Data will be populated here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="appointment-container">
+                <div class="list-appointment">
+                    <p id="appointment-title">Họp nhóm: </p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nhóm đề tài</th>
+                            <th>Ngày hẹn</th>
+                            <th>Thời gian bắt đầu</th>
+                            <th>Thời gian kết thúc</th>
+                            <th>Địa điểm</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="groupAppointmentTableBody">
+                        <!-- Data will be populated here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appointmentDetailsModalLabel">Thông tin chi tiết cuộc hẹn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="appointmentDetailsBody">
+                    <!-- Nội dung chi tiết của cuộc hẹn sẽ được thêm vào đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load menu.html into the menu-container div using fetch
+        fetch('menu.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('menu-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error fetching menu:', error));
+    </script>
+    <script src="/Teacher/history.js"></script>
+</body>
+
+</html>
