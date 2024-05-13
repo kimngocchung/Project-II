@@ -39,23 +39,7 @@
                         <th>Thời gian kết thúc</th>
                         <th>Địa điểm</th>
                     </tr>
-                    <tr>
-                        <td>Nhóm 1 Project 2</td>
-                        <td>Họp cá nhân</td>
-                        <td>02/04/2024</td>
-                        <td>11:30</td>
-                        <td>12:00</td>
-                        <td>B1 - 801</td>
-                    </tr>
-
-                    <tr>
-                        <td>Nhóm 1 Project 2</td>
-                        <td>Họp cá nhân</td>
-                        <td>02/04/2024</td>
-                        <td>11:30</td>
-                        <td>12:00</td>
-                        <td>B1 - 801</td>
-                    </tr>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -68,7 +52,40 @@
                 document.getElementById('menu-container').innerHTML = data;
             })
             .catch(error => console.error('Error fetching menu:', error));
+
+            function loadAppointments() {
+    fetch('/Teacher/home/appointments')
+        .then(response => response.json())
+        .then(appointments => {
+            const tableBody = document.querySelector('table tbody');
+            const appointmentNotification = document.querySelector('.notification');
+    
+            // Tính toán số lượng lịch hẹn
+            const numberOfAppointments = appointments.length;
+            // Cập nhật nội dung của thông báo
+            appointmentNotification.innerHTML = `<p>Bạn có <span class="appointment-count">${numberOfAppointments}</span> lịch hẹn sắp tới</p>`;
+
+            appointments.forEach(app => {
+                const row = `<tr>
+                    <td>${app.group_name}</td>
+                    <td>${app.type}</td>
+                    <td>${app.date_only}</td>
+                    <td>${app.start_time}</td>
+                    <td>${app.end_time}</td>
+                    <td>${app.location}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error fetching appointments:', error));
+}
+
+
+        // Gọi hàm này khi trang được tải
+        document.addEventListener('DOMContentLoaded', loadAppointments);
     </script>
 </body>
 
+</html>
+</html>
 </html>
