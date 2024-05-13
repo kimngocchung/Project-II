@@ -24,19 +24,16 @@ const attachUserIdToRequest = (req, res, next) => {
 app.use(attachUserIdToRequest);
 // Cấu hình đường dẫn tĩnh cho thư mục "login" chứa tệp login.html và các tệp tĩnh trong thư mục "assets"
 app.use("/login", express.static(__dirname + "/login"));
- 
-// Cấu hình đường dẫn tĩnh cho thư mục "Group/HomepageTeacher" chứa tệp hometeacher.css
 app.use("/Teacher", express.static(__dirname + "/Teacher"));
- 
+app.use("/Student", express.static(__dirname + "/Student"));
 // Xử lý yêu cầu GET cho trang chủ "/" (trang đăng nhập)
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/login/login.html");
 });
  
 // Định nghĩa route để phục vụ homestudent.html từ thư mục homepagestudent
-app.get("/homepagestudent/homestudent", function (req, res) {
-    console.log(req.session);
-    res.sendFile(__dirname + "/homepagestudent/homestudent.html");
+app.get("/Student/home", function (req, res) {
+    res.sendFile(__dirname + "/Student/homestudent.html");
 });
  
 // Định nghĩa route để phục vụ hometeacher.html từ thư mục homepageteacher
