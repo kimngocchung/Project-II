@@ -24,16 +24,19 @@ const attachUserIdToRequest = (req, res, next) => {
 app.use(attachUserIdToRequest);
 // Cấu hình đường dẫn tĩnh cho thư mục "login" chứa tệp login.html và các tệp tĩnh trong thư mục "assets"
 app.use("/login", express.static(__dirname + "/login"));
+ 
+// Cấu hình đường dẫn tĩnh cho thư mục "Group/HomepageTeacher" chứa tệp hometeacher.css
 app.use("/Teacher", express.static(__dirname + "/Teacher"));
-app.use("/Student", express.static(__dirname + "/Student"));
+ 
 // Xử lý yêu cầu GET cho trang chủ "/" (trang đăng nhập)
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/login/login.html");
 });
  
 // Định nghĩa route để phục vụ homestudent.html từ thư mục homepagestudent
-app.get("/Student/home", function (req, res) {
-    res.sendFile(__dirname + "/Student/homestudent.html");
+app.get("/homepagestudent/homestudent", function (req, res) {
+    console.log(req.session);
+    res.sendFile(__dirname + "/homepagestudent/homestudent.html");
 });
  
 // Định nghĩa route để phục vụ hometeacher.html từ thư mục homepageteacher
@@ -48,7 +51,7 @@ app.get("/Teacher/history", function (req, res) {
 app.get("/Teacher/history/personalappointment", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT s.fullname, g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN students s ON a.student_id = s.id JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Personal' AND t.id = ?;";
+        const sql = "SELECT s.fullname, g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN students s ON a.student_id = s.id JOIN assigned_projects ap ON a.id = ap.project_id JOIN `groups` g ON ap.group_id = g.id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Personal' AND t.id = ?;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -66,7 +69,7 @@ app.get("/Teacher/history/personalappointment", async function (req, res) {
 app.get("/Teacher/history/groupappointment", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Group' AND t.id = ?;";
+        const sql = "SELECT g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN assigned_projects ap ON a.id = ap.project_id JOIN `groups` g ON ap.group_id = g.id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Group' AND t.id = ?;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -80,6 +83,36 @@ app.get("/Teacher/history/groupappointment", async function (req, res) {
         res.status(500).json({ error: "Error retrieving appointments" });
     }
 });
+
+app.get("/Teacher/home/appointments", async function (req, res) {
+    try {
+        const userId = req.userId; // Lấy userId của giảng viên từ session
+        const sql = `
+            SELECT a.id, g.name AS group_name, a.type, 
+            DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, 
+            DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, 
+            DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, 
+            a.location, a.status, a.description 
+            FROM appointments a 
+            JOIN projects p ON a.project_id = p.id 
+            JOIN teachers t ON p.teacher_id = t.id 
+            JOIN \`groups\` g ON a.project_id = g.id 
+            WHERE t.id = ? AND a.status = 'Scheduled';`;
+
+        connection.query(sql, [userId], function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+            // Gửi danh sách lịch hẹn dưới dạng JSON về trình duyệt
+            res.json(results);
+        });
+    } catch (error) {
+        console.error("Error retrieving appointments:", error);
+        res.status(500).json({ error: "Error retrieving appointments" });
+    }
+});
+
+
 // Sử dụng loginHandler để xử lý yêu cầu đăng nhập
 app.use("/", loginHandler);
  
@@ -88,4 +121,8 @@ const PORT = 5000;
 app.listen(PORT, function() {
     console.log(`Server is running on port ${PORT}`);
 });
+ 
+ 
+
+ 
  
