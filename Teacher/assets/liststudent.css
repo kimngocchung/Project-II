@@ -1,0 +1,174 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex; /* Thiết lập container là flex container */
+    height: 100vh; /* Đảm bảo container có chiều cao đầy đủ */
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Định dạng cho container chính */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.function-list {
+    background: linear-gradient(180deg, #D9D9D9 0%, #737373 0%, #777777 96%, #777777 96%, #737373 100%);
+    width: 250px; /* Chiều rộng cố định */
+    height: 100vh; /* Chiều cao đầy đủ */
+    padding: 0;
+    margin: 0;
+}
+
+.function-list .divider {
+    border: none;
+    height: 0.5px;
+    background-color: #ccc; /* Màu của đường kẻ */
+    margin: 0; /* Loại bỏ margin mặc định */
+}
+
+.function-list-item {
+    list-style-type: none;
+    padding: 0; /* Loại bỏ padding mặc định */
+}
+
+.TT-link , .GV-link, .item-link {
+    text-align: left; /* Căn chữ và icon về bên trái */
+    text-decoration: none;
+    display: flex; /* Sử dụng flexbox để căn chỉnh */
+    align-items: center; /* Căn giữa các mục theo chiều dọc */
+    padding: 10px 15px; /* Đồng bộ padding */
+    font-size: 15px; /* Đồng bộ font-size */
+    color: #fff;
+}
+
+.TT-link .bi, .GV-link .bi, .item-link .bi {
+    margin-right: 10px; /* Khoảng cách giữa icon và chữ */
+    font-size: 30px; /* Đồng bộ kích thước icon */
+}
+
+/* Định dạng cho phần nội dung bên phải */
+.right-panel {
+    flex-grow: 1; /* Cho phép right-panel mở rộng để chiếm phần còn lại của không gian */
+    background-color: #f0f0f0; /* Màu xám nhạt */
+    height: 100vh; /* Đảm bảo chiều cao đầy đủ */
+}
+
+/* Định dạng cho thanh điều hướng trên cùng */
+.right-panel .navigation {
+    padding: 29px;
+    background-color: white;
+    height: 50px; /* Độ cao tổng thể bao gồm padding */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+}
+
+.right-panel .navigation .bi-list {
+    font-size: 40px;
+}
+
+.right-panel .navigation .bi-box-arrow-right {
+    font-size: 40px;
+    color: black;
+}
+
+.appointment-container {
+    margin: 20px 25px 25px 25px; 
+    background-color: #fff; /* Đảm bảo màu nền khác biệt */
+    padding: 20px; /* Thêm padding 20px ở bốn góc */
+    border-radius: 8px; /* Tùy chọn: thêm bo góc để tạo hiệu ứng đẹp hơn */
+    position: relative; /* Đặt position relative để chứa các phần tử tuyệt đối bên trong */
+}
+
+.appointment-container h1 {
+    margin-top: 0;
+    color: #546e7a;
+    font-size: 25px;
+}
+
+/* Định dạng cho các nút */
+button {
+    background-color: #546e7a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #546e7a;
+}
+
+/* Định dạng cho bảng sinh viên */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+    color: #37474f;
+}
+
+td button {
+    background-color: #e57373;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+td button:hover {
+    background-color: #ef5350;
+}
+
+/* Định dạng cho form thêm sinh viên */
+#addStudentFormContainer {
+    margin-top: 20px;
+}
+
+.add-student-form {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px; /* Thêm margin-top để tạo khoảng cách giữa tiêu đề và phần tử form */
+}
+.add-student-form input,
+.add-student-form button {
+    flex: 1; /* Phần tử con sẽ mở rộng để điền hết không gian trống */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-student-form button {
+    background-color: #37474f;
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+.add-student-form button:hover {
+    background-color: #546e7a;
+}
+/* Định dạng cho phần action buttons */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end; /* Đưa các nút sang bên phải */
+    margin-top: 20px; /* Khoảng cách phía trên */
+}

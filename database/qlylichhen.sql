@@ -22,7 +22,7 @@ USE `qlylichhen`;
 -- Dumping structure for table qlylichhen.appointments
 CREATE TABLE IF NOT EXISTS `appointments` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `project_id` int NOT NULL,
+  `group_id` int NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -31,17 +31,19 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   `location` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('Scheduled','Completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Scheduled',
   PRIMARY KEY (`id`),
-  KEY `FK_appointments_projects` (`project_id`),
   KEY `FK_appointments_students` (`student_id`),
-  CONSTRAINT `FK_appointments_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
+  KEY `FK_appointments_projects` (`group_id`) USING BTREE,
+  CONSTRAINT `FK_appointments_groups` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   CONSTRAINT `FK_appointments_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table qlylichhen.appointments: ~3 rows (approximately)
-INSERT INTO `appointments` (`id`, `project_id`, `start`, `end`, `description`, `type`, `student_id`, `location`, `status`) VALUES
+-- Dumping data for table qlylichhen.appointments: ~5 rows (approximately)
+INSERT INTO `appointments` (`id`, `group_id`, `start`, `end`, `description`, `type`, `student_id`, `location`, `status`) VALUES
 	(1, 1, '2024-04-23 11:30:00', '2024-04-23 12:00:00', NULL, 'Group', NULL, 'B1 - 801', 'Completed'),
 	(2, 1, '2024-05-07 11:30:00', '2024-05-07 12:00:00', NULL, 'Personal', 1, 'B1 - 801', 'Completed'),
-	(3, 1, '2024-05-14 11:30:00', '2024-05-14 12:00:00', '', 'Group', NULL, 'B1 - 801', 'Scheduled');
+	(3, 1, '2024-05-14 11:30:00', '2024-05-14 12:00:00', '', 'Group', NULL, 'B1 - 801', 'Scheduled'),
+	(4, 2, '2024-05-12 11:30:00', '2024-05-12 11:45:00', 'test', 'Personal', 4, NULL, 'Completed'),
+	(5, 2, '2024-05-16 11:30:00', '2024-05-16 12:00:00', NULL, 'Personal', 4, NULL, 'Scheduled');
 
 -- Dumping structure for table qlylichhen.assigned_projects
 CREATE TABLE IF NOT EXISTS `assigned_projects` (
@@ -53,11 +55,12 @@ CREATE TABLE IF NOT EXISTS `assigned_projects` (
   KEY `FK_assigned_projects_projects` (`project_id`),
   CONSTRAINT `FK_assigned_projects_groups` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   CONSTRAINT `FK_assigned_projects_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table qlylichhen.assigned_projects: ~1 rows (approximately)
+-- Dumping data for table qlylichhen.assigned_projects: ~2 rows (approximately)
 INSERT INTO `assigned_projects` (`id`, `group_id`, `project_id`) VALUES
-	(1, 1, 1);
+	(1, 1, 1),
+	(2, 2, 2);
 
 -- Dumping structure for event qlylichhen.check_delete_freetime
 DELIMITER //
@@ -79,25 +82,78 @@ DELIMITER ;
 -- Dumping structure for table qlylichhen.freetimes
 CREATE TABLE IF NOT EXISTS `freetimes` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `start` datetime NOT NULL,
-  `end` datetime NOT NULL,
+  `date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- Dumping data for table qlylichhen.freetimes: ~1 rows (approximately)
-INSERT INTO `freetimes` (`id`, `start`, `end`) VALUES
-	(1, '2024-05-14 08:00:00', '2024-05-14 12:00:00');
+INSERT INTO `freetimes` (`id`, `date`, `start_time`, `end_time`) VALUES
+  (1, '2024-05-30', '08:00:00', '12:00:00'),
+  (2, '2024-05-31', '08:01:00', '12:00:00');
+
+
+DELIMITER //
+
+CREATE PROCEDURE delete_past_freetimes()
+BEGIN
+    DELETE FROM freetimes WHERE date < CURDATE();
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE add_freetime(
+    IN new_date DATE,
+    IN start_time TIME,
+    IN end_time TIME
+)
+BEGIN
+    DECLARE msg VARCHAR(255);
+
+    -- Kiểm tra nếu thời gian kết thúc lớn hơn thời gian bắt đầu
+    IF end_time <= start_time THEN
+        SET msg = 'End time must be greater than start time';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+    END IF;
+
+    -- Kiểm tra nếu ngày mới phải lớn hơn hoặc bằng ngày hiện tại
+    IF new_date < CURDATE() THEN
+        SET msg = 'Date must be greater than or equal to today';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+    END IF;
+
+    -- Thêm lịch rảnh vào bảng freetimes
+    INSERT INTO freetimes (date, start_time, end_time)
+    VALUES (new_date, start_time, end_time);
+END //
+
+DELIMITER ;
+
+
+CREATE EVENT delete_old_freetimes
+ON SCHEDULE EVERY 1 DAY
+DO
+    CALL delete_past_freetimes();
+
+
+
 
 -- Dumping structure for table qlylichhen.groups
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table qlylichhen.groups: ~1 rows (approximately)
+-- Dumping data for table qlylichhen.groups: ~2 rows (approximately)
 INSERT INTO `groups` (`id`, `name`) VALUES
-	(1, 'Nhóm 1');
+	(1, 'Nhóm 1'),
+	(2, 'test');
 
 -- Dumping structure for table qlylichhen.group_members
 CREATE TABLE IF NOT EXISTS `group_members` (
@@ -109,13 +165,14 @@ CREATE TABLE IF NOT EXISTS `group_members` (
   KEY `FK_group_members_students` (`student_id`),
   CONSTRAINT `FK_group_members_groups` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   CONSTRAINT `FK_group_members_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table qlylichhen.group_members: ~3 rows (approximately)
+-- Dumping data for table qlylichhen.group_members: ~4 rows (approximately)
 INSERT INTO `group_members` (`id`, `group_id`, `student_id`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
-	(3, 1, 3);
+	(3, 1, 3),
+	(4, 2, 4);
 
 -- Dumping structure for table qlylichhen.projects
 CREATE TABLE IF NOT EXISTS `projects` (
@@ -126,11 +183,12 @@ CREATE TABLE IF NOT EXISTS `projects` (
   PRIMARY KEY (`id`),
   KEY `FK_projects_teachers` (`teacher_id`),
   CONSTRAINT `FK_projects_teachers` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table qlylichhen.projects: ~1 rows (approximately)
+-- Dumping data for table qlylichhen.projects: ~2 rows (approximately)
 INSERT INTO `projects` (`id`, `title`, `description`, `teacher_id`) VALUES
-	(1, 'Project 2: Quản lý lịch hẹn', 'Web quản lý lịch hẹn giữa sinh viên và giảng viên', 1);
+	(1, 'Project 2: Quản lý lịch hẹn', 'Web quản lý lịch hẹn giữa sinh viên và giảng viên', 1),
+	(2, 'test', NULL, 2);
 
 -- Dumping structure for table qlylichhen.students
 CREATE TABLE IF NOT EXISTS `students` (

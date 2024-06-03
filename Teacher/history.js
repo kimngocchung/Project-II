@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchGroupAppointments();
     fetchPersonalAppointments();
 });
+
 function showPersonalAppointmentDetails(fullname, groupName, date, startTime, endTime, location, status, description) {
     const modalTitle = document.getElementById('appointmentDetailsModalLabel');
     const modalBody = document.getElementById('appointmentDetailsBody');
@@ -74,6 +75,7 @@ function showPersonalAppointmentDetails(fullname, groupName, date, startTime, en
     });
     appointmentDetailsModal.show();
 }
+
 function showGroupAppointmentDetails(groupName, date, startTime, endTime, location, status, description) {
     const modalTitle = document.getElementById('appointmentDetailsModalLabel');
     const modalBody = document.getElementById('appointmentDetailsBody');
@@ -96,4 +98,3 @@ function showGroupAppointmentDetails(groupName, date, startTime, endTime, locati
     });
     appointmentDetailsModal.show();
 }
-
