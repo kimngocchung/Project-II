@@ -61,6 +61,10 @@ app.get("/Teacher/project", function (req, res) {
     res.sendFile(__dirname + "/Teacher/project.html");
 });
 
+app.get("/Student/group", function (req, res) {
+    res.sendFile(__dirname + "/Student/group.html");
+});
+
 // Lấy danh sách cuộc hẹn với cá nhân của giảng viên
 app.get("/Teacher/history/personalappointment", async function (req, res) {
     try {
@@ -311,8 +315,8 @@ app.get("/Teacher/getStudents", async function (req, res) {
     }
 });
 
-// Lấy danh sách sinh viên của một nhóm
-app.get("/Teacher/getStudentsOfGroup", async function (req, res) {
+// Lấy danh sách sinh viên của nhóm
+app.get("/getStudentsOfGroup", async function (req, res) {
     try {
         const group_id = req.query.group_id;
         const sql = `
@@ -484,6 +488,34 @@ app.post('/import-students', (req, res) => {
 });
 */
 
+app.get("/Student/getGroups", async function (req, res) {
+    try {
+        const userId = req.userId; // Lấy userId của giảng viên từ session
+        const sql = `
+        SELECT
+	        g.id, g.name, p.title, p.description, t.fullname
+        FROM \`groups\` g
+        JOIN assigned_projects ap ON g.id = ap.group_id
+        JOIN projects p ON ap.project_id = p.id
+        JOIN teachers t ON p.teacher_id = t.id
+        JOIN group_members gm ON g.id = gm.group_id
+        WHERE
+	        gm.student_id = ?`;
+
+        connection.query(sql, [userId], function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+            // Gửi danh sách lịch hẹn dưới dạng JSON về trình duyệt
+            res.json(results);
+        });
+    } catch (error) {
+        console.error("Error retrieving appointments:", error);
+        res.status(500).json({ error: "Error retrieving appointments" });
+    }
+});
+
+// Sử dụng loginHandler để xử lý yêu cầu đăng nhập
 app.use("/", loginHandler);
 
 const PORT = 5000;

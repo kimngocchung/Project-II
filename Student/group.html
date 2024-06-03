@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý lịch hẹn</title>
+    <link rel="stylesheet" href="/Student/assets/group.css">
+    <link rel="stylesheet" href="/Student/assets/menu.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div id="menu-container"></div>
+        <div class="right-panel">
+            <nav class="navigation-bar">
+                <i class="bi bi-list navigation-icon"></i>
+                <a href="/" class="navigation-link"><i class="bi bi-box-arrow-right"></i></a>
+            </nav>
+            <div class="home-link-container">
+                <a href="" class="home-link">Danh sách nhóm đề tài</a>
+            </div>
+            <div class="group-table-container">
+                <table class="group-table">
+                    <thead>
+                        <tr>
+                            <th>Nhóm sinh viên</th>
+                            <th>Tên đề tài</th>
+                            <th>GVHD</th>
+                            <th>Thông tin</th>
+                            <th>Lịch hẹn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="group-table-body">
+                        <!-- Data will be populated here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="groupModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông tin nhóm sinh viên</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nhóm sinh viên:</strong> <span id="groupName"></span></p>
+                    <p><strong>Tên đề tài:</strong> <span id="projectTitle"></span></p>
+                    <p><strong>GVHD:</strong> <span id="teacherName"></span></p>
+                    <p><strong>Nội dung đề tài:</strong> <span id="projectDescription"></span></p>
+                    <h5>Thành viên:</h5>
+                    <table id="groupMembersTable">
+                        <thead>
+                            <tr>
+                                <th>Họ và tên</th>
+                                <th>Mã số sinh viên</th>
+                                <!-- Thêm các cột khác nếu cần -->
+                            </tr>
+                        </thead>
+                        <tbody id="groupMembers">
+                            <!-- Data will be populated here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load menu.html into the menu-container div using fetch
+        fetch('menu.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('menu-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error fetching menu:', error));
+    </script>
+    <script src="/Student/group.js"></script>
+</body>
+
+</html>

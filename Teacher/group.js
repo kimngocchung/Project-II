@@ -79,7 +79,7 @@ function fetchStudents() {
 }
 
 function fetchStudentsOfGroup(group_id) {
-    fetch(`/Teacher/getStudentsOfGroup?group_id=${group_id}`)
+    fetch(`/getStudentsOfGroup?group_id=${group_id}`)
         .then(response => response.json())
         .then(data => {
             students = data;

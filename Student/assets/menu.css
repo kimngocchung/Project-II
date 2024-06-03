@@ -1,0 +1,34 @@
+.function-list {
+    background: linear-gradient(180deg, #D9D9D9 0%, #737373 0%, #777777 96%, #777777 96%, #737373 100%);
+    width: 250px;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.TT-link, .SV-link, .item-link {
+    text-align: left;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #fff;
+}
+
+.TT-link .bi, .SV-link .bi, .item-link .bi {
+    margin-right: 10px;
+    font-size: 30px;
+}
+
+.divider {
+    border: none;
+    height: 0.5px;
+    background-color: #ccc;
+    margin: 0;
+}
+
+.function-list-item {
+    list-style-type: none;
+    padding: 0;
+}
