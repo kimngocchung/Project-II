@@ -23,7 +23,7 @@
             </div>
             <div class="appointment-container">
                 <div class="notification" style="font-size: 20px;">
-                    <p>Bạn có 2 lịch hẹn sắp tới</p>
+                    <p>Bạn có 0 lịch hẹn sắp tới</p>
                 </div>
 
                 <div class="list-appointment">
@@ -53,20 +53,20 @@
             })
             .catch(error => console.error('Error fetching menu:', error));
 
-            function loadAppointments() {
-    fetch('/Teacher/home/appointments')
-        .then(response => response.json())
-        .then(appointments => {
-            const tableBody = document.querySelector('table tbody');
-            const appointmentNotification = document.querySelector('.notification');
-    
-            // Tính toán số lượng lịch hẹn
-            const numberOfAppointments = appointments.length;
-            // Cập nhật nội dung của thông báo
-            appointmentNotification.innerHTML = `<p>Bạn có <span class="appointment-count">${numberOfAppointments}</span> lịch hẹn sắp tới</p>`;
+        function loadAppointments() {
+            fetch('/Teacher/home/appointments')
+                .then(response => response.json())
+                .then(appointments => {
+                    const tableBody = document.querySelector('table tbody');
+                    const appointmentNotification = document.querySelector('.notification');
 
-            appointments.forEach(app => {
-                const row = `<tr>
+                    // Tính toán số lượng lịch hẹn
+                    const numberOfAppointments = appointments.length;
+                    // Cập nhật nội dung của thông báo
+                    appointmentNotification.innerHTML = `<p>Bạn có <span class="appointment-count">${numberOfAppointments}</span> lịch hẹn sắp tới</p>`;
+
+                    appointments.forEach(app => {
+                        const row = `<tr>
                     <td>${app.group_name}</td>
                     <td>${app.type}</td>
                     <td>${app.date_only}</td>
@@ -74,11 +74,11 @@
                     <td>${app.end_time}</td>
                     <td>${app.location}</td>
                 </tr>`;
-                tableBody.innerHTML += row;
-            });
-        })
-        .catch(error => console.error('Error fetching appointments:', error));
-}
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching appointments:', error));
+        }
 
 
         // Gọi hàm này khi trang được tải
@@ -87,5 +87,7 @@
 </body>
 
 </html>
+
 </html>
+
 </html>
