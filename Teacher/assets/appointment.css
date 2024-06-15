@@ -53,46 +53,44 @@ body {
     font-size: 30px;
 }
 
-.group-table-container {
-    margin: 10px 25px 25px 25px;
+.appointment-table-container {
+    margin: 25px 25px 25px 25px;
     background: white;
     padding: 20px;
     height: 70%;
 }
 
-.group-table {
+.appointment-table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #ccc;
 }
 
-.group-table th, .group-table td {
+.appointment-table th, .appointment-table td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
 }
 
-.group-table th {
+.appointment-table th {
     background-color: #f2f2f2;
     font-weight: bold;
     border: 1px solid #000;
 }
 
-
-#groupMembersTable {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ccc;
+.modal-body p > strong {
+    vertical-align: top;
 }
 
-#groupMembersTable th, #groupMembersTable td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
+#personalAppointmentLocation {
+    vertical-align: top;
+    margin-top: -5px; /* Điều chỉnh giá trị này cho phù hợp */
 }
 
-#groupMembersTable th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    border: 1px solid #000;
+#groupAppointmentLocation {
+    vertical-align: top;
+    margin-top: -5px; /* Điều chỉnh giá trị này cho phù hợp */
+}
+.list-appointment {
+    margin-top: 10px; /* Thêm khoảng cách giữa các bảng lịch hẹn */
 }

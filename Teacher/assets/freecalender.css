@@ -4,9 +4,9 @@ body {
 }
 
 .container-fluid {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important; /* Sử dụng 100% thay vì 100vw */
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Sử dụng 100% thay vì 100vw */
     max-width: 100%;
     display: flex; /* Thiết lập container là flex container */
     height: 100vh; /* Đảm bảo container có chiều cao đầy đủ */

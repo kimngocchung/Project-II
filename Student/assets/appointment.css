@@ -1,0 +1,153 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.container {
+    display: flex; 
+    height: 100vh; 
+    max-width: 100% !important;
+    padding-right: 0 !important; 
+    padding-left: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.right-panel {
+    flex-grow: 1;
+    background-color: #f0f0f0;
+    height: 100vh;
+    width: 100%;
+}
+
+.navigation-bar {
+    padding: 29px;
+    background-color: white;
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navigation-icon {
+    font-size: 40px;
+}
+
+.navigation-link {
+    font-size: 40px;
+    color: black;
+}
+
+.home-link-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-top: 15px;
+}
+
+.home-link {
+    text-decoration: none;
+    color: #567184;
+    font-size: 30px;
+}
+
+.appointment-add-container {
+    text-align: right;
+    padding-right: 20px;
+    font-size: 18px;
+}
+
+.appointment-add-link {
+    color: #000;
+}
+
+.group-appointment-add-container {
+    text-align: right;
+    padding-right: 20px;
+    font-size: 18px;
+}
+
+.group-appointment-add-link {
+    color: #000;
+}
+
+.appointment-table-container {
+    margin: 10px 25px 25px 25px;
+    background: white;
+    padding: 20px;
+    height: 70%;
+}
+
+.appointment-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+.appointment-table th, .appointment-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.appointment-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    border: 1px solid #000;
+}
+
+.modal-body p > strong {
+    vertical-align: top;
+}
+
+#appointmentLocation {
+    vertical-align: top;
+    margin-top: -5px; /* Điều chỉnh giá trị này cho phù hợp */
+}
+
+.personal-free-times-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Khoảng cách từ các phần tử khác */
+}
+
+.personal-free-times-table th, .personal-free-times-table td {
+    border: 1px solid #ddd; /* Màu viền */
+    padding: 8px; /* Đệm cho nội dung trong th và td */
+    text-align: left; /* Căn lề trái cho nội dung */
+}
+
+.personal-free-times-table th {
+    background-color: #f8f8f8; /* Màu nền cho tiêu đề */
+    color: #333; /* Màu chữ cho tiêu đề */
+    font-weight: bold; /* Độ đậm cho chữ */
+}
+
+.group-free-times-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Khoảng cách từ các phần tử khác */
+}
+
+.group-free-times-table th, .group-free-times-table td {
+    border: 1px solid #ddd; /* Màu viền */
+    padding: 8px; /* Đệm cho nội dung trong th và td */
+    text-align: left; /* Căn lề trái cho nội dung */
+}
+
+.group-free-times-table th {
+    background-color: #f8f8f8; /* Màu nền cho tiêu đề */
+    color: #333; /* Màu chữ cho tiêu đề */
+    font-weight: bold; /* Độ đậm cho chữ */
+}
+
+label {
+    margin-top: 20px; /* Điều chỉnh giá trị này theo nhu cầu */
+}
+.time-range {
+    display: flex;
+    align-items: center; /* Căn chỉnh các phần tử theo trục dọc */
+    gap: 8px; /* Khoảng cách giữa các phần tử */
+}

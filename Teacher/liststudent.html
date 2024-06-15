@@ -56,6 +56,62 @@
         .detail-button:hover {
             background-color: #0056b3; /* Màu xanh đậm hơn khi hover */
         }
+        .button-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .import-button, .delete-button {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .import-button {
+            background-color: #28a745;
+        }
+        .import-button:hover {
+            background-color: #218838;
+        }
+        .delete-button {
+            background-color: #dc3545;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        .delete-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .delete-options input {
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .delete-options button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+        }
+        .delete-options button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +131,6 @@
                             <th>Họ tên</th>
                             <th>MSSV</th>
                             <th>Lớp</th>
-                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,14 +141,32 @@
         </div>
     </div>
 
-    <!-- Modal structure -->
-    <div id="studentModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Chi tiết sinh viên</h2>
-            <div id="studentDetails"></div>
+    <div class="button-container">
+        <button class="import-button" onclick="document.getElementById('importExcel').click();">Import Excel</button>
+    </div>
+    <input type="file" id="importExcel" style="display: none;" accept=".xlsx" />
+
+   <!-- 
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <h2>Xóa Sinh Viên</h2>
+        <div class="delete-options">
+            <input type="text" id="deleteStudentCode" placeholder="Nhập MSSV cần xóa">
+            <button onclick="deleteStudentByCode()">Xóa theo MSSV</button>
+            <button onclick="deleteAllStudents()">Xóa tất cả</button>
         </div>
     </div>
+</div> -->
+
+<!-- Modal structure -->
+<div id="studentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <h2>Chi tiết sinh viên</h2>
+        <div id="studentDetails"></div>
+    </div>
+</div>
 
     <script src="liststudent.js"></script>
 </body>

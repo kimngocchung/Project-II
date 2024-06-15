@@ -11,7 +11,7 @@ function fetchGroups() {
                 <td>${group.title}</td>
                 <td>${group.fullname}</td>
                 <td><a class="detail-link">Chi tiết</a></td>
-                <td>Chi tiết</td>
+                <td><a class="appointment-link data-group-id="${group.id}">Chi tiết</a></td>
                 `;
                 groupTableBody.appendChild(row);
 
@@ -27,6 +27,12 @@ function fetchGroups() {
                     // Hiển thị modal
                     var myModal = new bootstrap.Modal(document.getElementById('groupModal'));
                     myModal.show();
+                });
+
+                row.querySelector('.appointment-link').addEventListener('click', function () {
+                    localStorage.setItem('selectedGroupId', group.id);
+                    localStorage.setItem('selectedGroupTeacherId', group.teacher_id);
+                    window.location.href = `/Student/appointment?groupId=${group.id}`;
                 });
             });
         })
