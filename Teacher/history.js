@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/Teacher/history/personalappointment')
             .then(response => response.json())
             .then(data => {
-                const appointmentTableBody = document.getElementById('appointmentTableBody');
+                const appointmentTableBody = document.getElementById('personalAppointmentTableBody');
 
                 data.forEach(appointment => {
                     const row = document.createElement('tr');
@@ -98,3 +98,41 @@ function showGroupAppointmentDetails(groupName, date, startTime, endTime, locati
     });
     appointmentDetailsModal.show();
 }
+
+document.getElementById('personalAppointmentFilter').addEventListener('input', function () {
+    const filterValue = this.value.toUpperCase();
+    const table = document.getElementById('personalAppointmentTableBody');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        let visible = false;
+        const columns = rows[i].getElementsByTagName('td');
+        for (let j = 0; j < columns.length - 1; j++) { // Bỏ qua cột cuối cùng chứa nút
+            const column = columns[j];
+            if (column && column.innerHTML.toUpperCase().indexOf(filterValue) > -1) {
+                visible = true;
+                break;
+            }
+        }
+        rows[i].style.display = visible ? "" : "none";
+    }
+});
+
+document.getElementById('groupAppointmentFilter').addEventListener('input', function () {
+    const filterValue = this.value.toUpperCase();
+    const table = document.getElementById('groupAppointmentTableBody');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        let visible = false;
+        const columns = rows[i].getElementsByTagName('td');
+        for (let j = 0; j < columns.length - 1; j++) { // Bỏ qua cột cuối cùng chứa nút
+            const column = columns[j];
+            if (column && column.innerHTML.toUpperCase().indexOf(filterValue) > -1) {
+                visible = true;
+                break;
+            }
+        }
+        rows[i].style.display = visible ? "" : "none";
+    }
+});

@@ -57,7 +57,7 @@ body {
     margin: 10px 25px 25px 25px;
     background: white;
     padding: 20px;
-    height: 80%;
+    height: 70%;
 }
 form {
     display: flex;
@@ -69,7 +69,7 @@ form {
 label {
     font-weight: bold;
 }
-input[type="text"], input[type="date"], input[type="tel"], input[type="email"] {
+input[type="text"], input[type="date"], input[type="tel"], input[type="email"], input[type="password"] {
     width: 100%; /* Cho phép input chiếm toàn bộ chiều rộng */
     padding: 4px;
     border: 1px solid #ccc;
@@ -87,4 +87,22 @@ button {
 }
 button:hover {
     background-color: #303f9f;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.col {
+    flex: 1;
+    padding: 0 10px;
+}
+
+/* Đảm bảo rằng các trường nhập liệu không chạm vào nhau */
+.col:first-child {
+    padding-left: 0;
+}
+
+.col:last-child {
+    padding-right: 0;
 }

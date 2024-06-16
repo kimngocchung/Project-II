@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý lịch hẹn</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/Teacher/assets/history.css">
+    <link rel="stylesheet" href="/Teacher/assets/menu.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
         <div id="menu-container" class="function-list"></div>
@@ -21,8 +24,11 @@
                 <a href="" class="home-link">Lịch sử cuộc hẹn</a>
             </div>
             <div class="appointment-container">
-                <div class="list-appointment">
-                    <p id="appointment-title">Họp cá nhân: </p>
+                <div class="title-filter-container">
+                    <p id="personal-appointment-title">Họp cá nhân: </p>
+                    <div class="filter-container">
+                        <input type="text" id="personalAppointmentFilter" placeholder="Lọc họp cá nhân...">
+                    </div>
                 </div>
                 <table>
                     <thead>
@@ -37,14 +43,15 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="appointmentTableBody">
+                    <tbody id="personalAppointmentTableBody">
                         <!-- Data will be populated here dynamically -->
                     </tbody>
                 </table>
-            </div>
-            <div class="appointment-container">
-                <div class="list-appointment">
-                    <p id="appointment-title">Họp nhóm: </p>
+                <div class="title-filter-container">
+                    <p id="group-appointment-title">Họp nhóm: </p>
+                    <div class="filter-container">
+                        <input type="text" id="groupAppointmentFilter" placeholder="Lọc họp nhóm...">
+                    </div>
                 </div>
                 <table>
                     <thead>
@@ -65,7 +72,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,4 +98,5 @@
     </script>
     <script src="/Teacher/history.js"></script>
 </body>
+
 </html>

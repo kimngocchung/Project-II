@@ -80,10 +80,11 @@ function displayStudents(students) {
     console.log('Displaying students:', students); // Log dữ liệu sinh viên được hiển thị
     const studentTableBody = document.querySelector('#studentTable tbody');
     studentTableBody.innerHTML = '';
+    let studentNumber = 1;
     students.forEach(student => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${student.id || ''}</td>
+            <td>${studentNumber++}</td>
             <td>${student.fullname || 'null'}</td>
             <td>${student.studentcode || 'null'}</td>
             <td>${student.class || 'null'}</td>

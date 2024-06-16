@@ -8,6 +8,7 @@ function fetchInfo() {
             document.getElementById('email').value = teacher.email;
             document.getElementById('phonenumber').value = teacher.phonenumber;
             document.getElementById('dateofbirth').value = teacher.dob;
+            document.getElementById('password').value = teacher.password;
             });
         })
         .catch(error => {
@@ -27,6 +28,7 @@ document.getElementById('saveButton').addEventListener('click', function (event)
         email: document.getElementById('email').value,
         phonenumber: document.getElementById('phonenumber').value,
         dateofbirth: document.getElementById('dateofbirth').value,
+        password: document.getElementById('password').value,
     };
     // Gửi dữ liệu đến server
     fetch('/Teacher/saveInfo', {

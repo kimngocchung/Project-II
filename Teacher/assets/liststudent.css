@@ -7,47 +7,16 @@ body {
     display: flex; /* Thiết lập container là flex container */
     height: 100vh; /* Đảm bảo container có chiều cao đầy đủ */
     font-family: 'Source Sans Pro', sans-serif;
+    padding-right: 0 !important; 
+    padding-left: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
 /* Định dạng cho container chính */
 .container {
     display: flex;
     height: 100vh;
-}
-
-.function-list {
-    background: linear-gradient(180deg, #D9D9D9 0%, #737373 0%, #777777 96%, #777777 96%, #737373 100%);
-    width: 250px; /* Chiều rộng cố định */
-    height: 100vh; /* Chiều cao đầy đủ */
-    padding: 0;
-    margin: 0;
-}
-
-.function-list .divider {
-    border: none;
-    height: 0.5px;
-    background-color: #ccc; /* Màu của đường kẻ */
-    margin: 0; /* Loại bỏ margin mặc định */
-}
-
-.function-list-item {
-    list-style-type: none;
-    padding: 0; /* Loại bỏ padding mặc định */
-}
-
-.TT-link , .GV-link, .item-link {
-    text-align: left; /* Căn chữ và icon về bên trái */
-    text-decoration: none;
-    display: flex; /* Sử dụng flexbox để căn chỉnh */
-    align-items: center; /* Căn giữa các mục theo chiều dọc */
-    padding: 10px 15px; /* Đồng bộ padding */
-    font-size: 15px; /* Đồng bộ font-size */
-    color: #fff;
-}
-
-.TT-link .bi, .GV-link .bi, .item-link .bi {
-    margin-right: 10px; /* Khoảng cách giữa icon và chữ */
-    font-size: 30px; /* Đồng bộ kích thước icon */
 }
 
 /* Định dạng cho phần nội dung bên phải */
