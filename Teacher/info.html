@@ -25,25 +25,47 @@
             </div>
             <div class="form-container">
                 <form id="teacher-information-form">
-                    <div class="mb-3">
-                        <label for="fullname" class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" id="fullname" name="fullname" required>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="fullname" class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" id="fullname" name="fullname" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="teachercode" class="form-label">Mã giảng viên</label>
+                                <input type="text" class="form-control" id="teachercode" name="teachercode" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="teachercode" class="form-label">Mã giảng viên</label>
-                        <input type="text" class="form-control" id="teachercode" name="teachercode" required>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="dob" class="form-label">Ngày sinh</label>
+                                <input type="date" class="form-control" id="dateofbirth" name="Ngày sinh" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="phonenumber" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" id="phonenumber" name="phonenumber" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="dob" class="form-label">Ngày sinh</label>
-                        <input type="date" class="form-control" id="dateofbirth" name="Ngày sinh" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phonenumber" class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-control" id="phonenumber" name="phonenumber" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary" id="saveButton">Lưu</button>
                 </form>

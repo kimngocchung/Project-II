@@ -9,6 +9,7 @@ function fetchInfo() {
             document.getElementById('phonenumber').value = student.phonenumber;
             document.getElementById('dateofbirth').value = student.dob;
             document.getElementById('class').value = student.class;
+            document.getElementById('password').value = student.password;
             });
         })
         .catch(error => {
@@ -29,6 +30,7 @@ document.getElementById('saveButton').addEventListener('click', function (event)
         phonenumber: document.getElementById('phonenumber').value,
         dateofbirth: document.getElementById('dateofbirth').value,
         className: document.getElementById('class').value,
+        password: document.getElementById('password').value,
     };
     // Gửi dữ liệu đến server
     fetch('/Student/saveInfo', {

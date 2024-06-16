@@ -91,7 +91,7 @@ app.get("/Teacher/free-time", function (req, res) {
 app.get("/Teacher/history/personalappointment", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT s.fullname, g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN students s ON a.student_id = s.id JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Personal' AND t.id = ?;";
+        const sql = "SELECT s.fullname, g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN students s ON a.student_id = s.id JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Personal' AND t.id = ? ORDER BY date_only ASC, start_time ASC;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -108,7 +108,7 @@ app.get("/Teacher/history/personalappointment", async function (req, res) {
 app.get("/Student/getInfo", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT s.fullname, s.studentcode, s.email, DATE_FORMAT(s.dateofbirth, '%Y-%m-%d') AS dob, s.phonenumber, s.class FROM students s WHERE s.id = ?;";
+        const sql = "SELECT s.fullname, s.studentcode, s.email, DATE_FORMAT(s.dateofbirth, '%Y-%m-%d') AS dob, s.phonenumber, s.class, s.password FROM students s WHERE s.id = ?;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -125,10 +125,10 @@ app.get("/Student/getInfo", async function (req, res) {
 app.patch("/Student/saveInfo", async function (req, res) {
     try {
         const userId = req.userId;
-        const { fullname, email, studentcode, dateofbirth, className, phonenumber } = req.body;
-        const sql = "UPDATE students SET fullname = ?, email = ?, studentcode = ?, dateofbirth = ?, phonenumber = ?, class = ? WHERE id = ?";
+        const { fullname, email, studentcode, dateofbirth, className, phonenumber, password } = req.body;
+        const sql = "UPDATE students SET fullname = ?, email = ?, studentcode = ?, dateofbirth = ?, phonenumber = ?, class = ?, password = ? WHERE id = ?";
 
-        connection.query(sql, [fullname, email, studentcode, dateofbirth, phonenumber, className, userId], function (error, results, fields) {
+        connection.query(sql, [fullname, email, studentcode, dateofbirth, phonenumber, className, password, userId], function (error, results, fields) {
             if (error) {
                 throw error;
             }
@@ -143,7 +143,7 @@ app.patch("/Student/saveInfo", async function (req, res) {
 app.get("/Teacher/getInfo", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT t.fullname, t.email, t.teachercode, t.phonenumber, DATE_FORMAT(t.dateofbirth, '%Y-%m-%d') AS dob FROM teachers t WHERE t.id = ?;";
+        const sql = "SELECT t.fullname, t.email, t.teachercode, t.phonenumber, DATE_FORMAT(t.dateofbirth, '%Y-%m-%d') AS dob, t.password FROM teachers t WHERE t.id = ?;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -160,10 +160,10 @@ app.get("/Teacher/getInfo", async function (req, res) {
 app.patch("/Teacher/saveInfo", async function (req, res) {
     try {
         const userId = req.userId;
-        const { fullname, email, teachercode, dateofbirth, phonenumber } = req.body;
-        const sql = "UPDATE teachers SET fullname = ?, email = ?, teachercode = ?, dateofbirth = ?, phonenumber = ? WHERE id = ?";
+        const { fullname, email, teachercode, dateofbirth, phonenumber, password } = req.body;
+        const sql = "UPDATE teachers SET fullname = ?, email = ?, teachercode = ?, dateofbirth = ?, phonenumber = ?, password = ? WHERE id = ?";
 
-        connection.query(sql, [fullname, email, teachercode, dateofbirth, phonenumber, userId], function (error, results, fields) {
+        connection.query(sql, [fullname, email, teachercode, dateofbirth, phonenumber, password, userId], function (error, results, fields) {
             if (error) {
                 throw error;
             }
@@ -179,7 +179,7 @@ app.patch("/Teacher/saveInfo", async function (req, res) {
 app.get("/Teacher/history/groupappointment", async function (req, res) {
     try {
         const userId = req.userId;
-        const sql = "SELECT g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Group' AND t.id = ?;";
+        const sql = "SELECT g.name, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN `groups` g ON a.group_id = g.id JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.project_id = p.id JOIN teachers t ON p.teacher_id = t.id WHERE a.type = 'Group' AND t.id = ? ORDER BY date_only ASC, start_time ASC;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -202,7 +202,8 @@ app.get('/freetimes', (req, res) => {
         DATE_FORMAT(f.start, '%Y-%m-%d') AS date_only,
         DATE_FORMAT(f.start, '%H:%i:%s') AS start_time,
         DATE_FORMAT(f.end, '%H:%i:%s') AS end_time
-    FROM freetimes f WHERE f.teacher_id = ?`;
+    FROM freetimes f WHERE f.teacher_id = ?
+    ORDER BY date_only ASC, start_time ASC`;
     connection.query(query, [userId], (err, results) => {
         if (err) {
             return res.status(500).send('Error fetching data');
@@ -397,12 +398,16 @@ app.put("/project/:id", async function (req, res) {
 // Lấy danh sách sinh viên
 app.get("/Teacher/getStudents", async function (req, res) {
     try {
+        const userId = req.userId; // Lấy userId của giảng viên từ session
         const sql = `
         SELECT
 	        s.id, s.fullname, s.studentcode
-        FROM students s`;
+        FROM students s
+        JOIN student_teacher st ON s.id = st.student_id
+        WHERE
+            st.teacher_id = ?`;
 
-        connection.query(sql, function (error, results, fields) {
+        connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
                 throw error;
             }
@@ -528,7 +533,7 @@ app.put("/Teacher/editGroup", async function (req, res) {
 app.get("/Teacher/home/appointments", async function (req, res) {
     try {
         const userId = req.userId; // Lấy userId của giảng viên từ session
-        const sql = "SELECT a.id, g.name AS group_name, a.type, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.group_id = p.id JOIN teachers t ON p.teacher_id = t.id JOIN `groups` g ON ap.group_id = g.id WHERE t.id = ? AND a.status = 'Scheduled';";
+        const sql = "SELECT a.id, g.name AS group_name, a.type, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.group_id = p.id JOIN teachers t ON p.teacher_id = t.id JOIN `groups` g ON ap.group_id = g.id WHERE t.id = ? AND a.status = 'Scheduled' ORDER BY date_only ASC, start_time ASC;";
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {
@@ -560,7 +565,8 @@ app.get("/Student/home/appointments", async function (req, res) {
         INNER JOIN projects p ON ap.project_id = p.id 
         INNER JOIN teachers t ON p.teacher_id = t.id 
         LEFT JOIN group_members gm ON g.id = gm.group_id 
-        WHERE (a.status = "Scheduled" AND ((a.type = "Personal" AND a.student_id = ?) OR (a.type = "Group" AND gm.student_id IS NOT NULL)))`;
+        WHERE (a.status = "Scheduled" AND ((a.type = "Personal" AND a.student_id = ?) OR (a.type = "Group" AND gm.student_id IS NOT NULL)))
+        ORDER BY date_only ASC, start_time ASC`;
 
         connection.query(sql, [userId, userId], function (error, results, fields) {
             if (error) {
@@ -618,9 +624,10 @@ app.get("/Student/getAppointments", async function (req, res) {
         JOIN projects p ON ap.project_id = p.id 
         LEFT JOIN group_members gm ON g.id = gm.group_id 
         WHERE (a.type = "Personal" AND a.student_id = ? AND a.group_id = ?) 
-            OR (a.type = "Group" AND a.group_id = ?)`;
+            OR (a.type = "Group" AND a.group_id = ?)
+        ORDER BY date_only ASC, start_time ASC`;
 
-        connection.query(sql, [userId, groupId, userId, groupId], function (error, results, fields) {
+        connection.query(sql, [userId, groupId, groupId], function (error, results, fields) {
             if (error) {
                 throw error;
             }
@@ -847,7 +854,8 @@ app.get("/Teacher/getPersonalAppointments", async function (req, res) {
             a.location, a.status, a.description
         FROM appointments a
         JOIN students s ON a.student_id = s.id
-        WHERE a.type = 'Personal' AND a.group_id = ?;`;
+        WHERE a.type = 'Personal' AND a.group_id = ?
+        ORDER BY date_only ASC, start_time ASC;`;
 
         connection.query(sql, [groupId], function (error, results, fields) {
             if (error) {
@@ -873,7 +881,8 @@ app.get("/Teacher/getGroupAppointments", async function (req, res) {
             a.location, a.status, a.description
         FROM appointments a
         JOIN \`groups\` g ON a.group_id = g.id
-        WHERE a.type = 'Group' AND a.group_id = ?;`;
+        WHERE a.type = 'Group' AND a.group_id = ?
+        ORDER BY date_only ASC, start_time ASC;`;
 
         connection.query(sql, [groupId], function (error, results, fields) {
             if (error) {
@@ -909,7 +918,7 @@ app.post('/import-students', upload.single('file'), (req, res) => {
         studentcode: row['StudentID'],
         email: row['Email'], // Sử dụng giá trị email từ file Excel
         dateofbirth: parseDate(row['birthdate']),
-        class: row['lớp'],
+        class: row['Lớp'],
         password: '1',
         phonenumber: null
     }));
