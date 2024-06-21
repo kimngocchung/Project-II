@@ -21,6 +21,8 @@ function fetchGroups() {
                     document.getElementById('projectTitle').textContent = group.title;
                     document.getElementById('projectDescription').textContent = group.description;
 
+                    fetchStudentsOfGroup(group.id);
+
                     // Hiển thị modal
                     var myModal = new bootstrap.Modal(document.getElementById('groupModal'));
                     myModal.show();
@@ -52,6 +54,7 @@ function fetchGroups() {
 
                 row.querySelector('.appointment-link').addEventListener('click', function () {
                     localStorage.setItem('selectedGroupId', group.id);
+                    localStorage.setItem('selectedGroupName', group.name);
                     localStorage.setItem('selectedGroupTeacherId', group.teacher_id);
                     window.location.href = `/Teacher/appointment?groupId=${group.id}`;
                 });
@@ -93,6 +96,16 @@ function fetchStudentsOfGroup(group_id) {
             // Add each student to the temporary participants and display them in the table
             students.forEach(student => {
                 addParticipantToGroupEdit(student);
+            });
+            const groupMembersTableBody = document.getElementById('groupMembers');
+            groupMembersTableBody.innerHTML = ''; // Clear the table body
+            data.forEach(member => {
+                const memberRow = document.createElement('tr');
+                memberRow.innerHTML = `
+                <td>${member.fullname}</td>
+                <td>${member.studentcode}</td>
+                `;
+                groupMembersTableBody.appendChild(memberRow);
             });
         })
         .catch(error => {
@@ -364,4 +377,23 @@ document.getElementById('saveGroupButtonEdit').addEventListener('click', functio
     // Đóng modal
     var myModal = bootstrap.Modal.getInstance(document.getElementById('editGroupModal'));
     myModal.hide();
+});
+
+document.getElementById('groupFilter').addEventListener('input', function () {
+    const filterValue = this.value.toUpperCase();
+    const table = document.getElementById('group-table-body');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        let visible = false;
+        const columns = rows[i].getElementsByTagName('td');
+        for (let j = 0; j < columns.length - 3; j++) { 
+            const column = columns[j];
+            if (column && column.innerHTML.toUpperCase().indexOf(filterValue) > -1) {
+                visible = true;
+                break;
+            }
+        }
+        rows[i].style.display = visible ? "" : "none";
+    }
 });

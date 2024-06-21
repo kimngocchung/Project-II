@@ -31,6 +31,7 @@ function fetchGroups() {
 
                 row.querySelector('.appointment-link').addEventListener('click', function () {
                     localStorage.setItem('selectedGroupId', group.id);
+                    localStorage.setItem('selectedGroupName', group.name);
                     localStorage.setItem('selectedGroupTeacherId', group.teacher_id);
                     window.location.href = `/Student/appointment?groupId=${group.id}`;
                 });

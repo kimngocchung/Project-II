@@ -6,51 +6,47 @@ function getCurrentDateFormatted() {
     return `${year}-${month}-${day}`;
 }
 
-function fetchAppointments(groupId) {
-    fetch(`/Student/getAppointments?groupId=${groupId}`)
+function loadAppointments() {
+    fetch('/Student/home/appointments')
         .then(response => response.json())
-        .then(data => {
-            const appointmentTableBody = document.getElementById('appointment-table-body');
+        .then(appointments => {
+            const tableBody = document.getElementById("appointment-table-body");
+            const appointmentNotification = document.querySelector('.notification');
 
-            data.forEach(appointment => {
+            // Tính toán số lượng lịch hẹn
+            const numberOfAppointments = appointments.length;
+            // Cập nhật nội dung của thông báo
+            appointmentNotification.innerHTML = `<p>Bạn có <span class="appointment-count">${numberOfAppointments}</span> lịch hẹn sắp tới.</p>`;
+
+            appointments.forEach(app => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${appointment.type}</td>
-                <td>${appointment.date_only}</td>
-                <td>${appointment.start_time}</td>
-                <td>${appointment.end_time}</td>
-                <td>${appointment.location}</td>
-                <td>${appointment.status}</td>
-                <td><a class="detail-link">Chi tiết</a></td>
-                `;
-                appointmentTableBody.appendChild(row);
-
-                row.querySelector('.detail-link').addEventListener('click', function () {
-                    currentAppointmentId = appointment.id;
-                    document.getElementById('appointmentType').textContent = appointment.type;
-                    document.getElementById('appointmentDate').textContent = appointment.date_only;
-                    document.getElementById('appointmentStartTime').textContent = appointment.start_time;
-                    document.getElementById('appointmentEndTime').textContent = appointment.end_time;
-                    document.getElementById('appointmentLocation').value = appointment.location;
-                    document.getElementById('appointmentStatus').textContent = appointment.status;
-                    document.getElementById('appointmentDescription').value = appointment.description;
-
-                    if (appointment.status === 'Scheduled') {
-                        document.getElementById('deleteAppointmentButton').style.display = '';
-                    } else {
-                        document.getElementById('deleteAppointmentButton').style.display = 'none';
-                    }
-
-                    // Hiển thị modal
-                    var myModal = new bootstrap.Modal(document.getElementById('appointmentDetailModal'));
-                    myModal.show();
-                });
+            <td>${app.name}</td>
+            <td>${app.type}</td>
+            <td>${app.date_only}</td>
+            <td>${app.start_time}</td>
+            <td>${app.end_time}</td>
+            <td>${app.location}</td>
+            <td>${app.fullname}</td>
+            `;
+                tableBody.appendChild(row);
             });
+        })
+        .catch(error => console.error('Error fetching appointments:', error));
+    populateTimeSelects();
+}
+
+let groups = [];
+
+function fetchGroups() {
+    fetch('/Student/getGroups')
+        .then(response => response.json())
+        .then(data => {
+            groups = data;
         })
         .catch(error => {
             console.error('Error fetching appointment data:', error);
         });
-    populateTimeSelects();
 }
 
 let personalFreeTimes = [];
@@ -154,25 +150,16 @@ function fetchGroupFreeTimes(date, teacherId, groupId) {
         .catch(error => console.error('Error fetching free times:', error));
 }
 
-let currentAppointmentId = null;
-
 document.addEventListener('DOMContentLoaded', function () {
+    loadAppointments();
+    fetchGroups();
     const currentDate = getCurrentDateFormatted();
-    const groupName = localStorage.getItem('selectedGroupName');
-    const homeLink = document.getElementById('home-link');
-    if (homeLink) {
-        homeLink.textContent = `${groupName} / Danh sách lịch hẹn`;
-    }
     document.getElementById('personalDate').setAttribute('min', currentDate);
     document.getElementById('groupDate').setAttribute('min', currentDate);
-
-    const groupId = localStorage.getItem('selectedGroupId'); // Đọc groupId từ Local Storage
-    if (groupId) {
-        fetchAppointments(groupId);
-    } else {
-        console.error('GroupId is missing');
-    }
-
+    document.getElementById('personalDate').addEventListener('change', handlePersonalSelectionChange);
+    document.getElementById('personalGroupDropdown').addEventListener('change', handlePersonalSelectionChange);
+    document.getElementById('groupDate').addEventListener('change', handleGroupSelectionChange);
+    document.getElementById('groupGroupDropdown').addEventListener('change', handleGroupSelectionChange);
     const tabs = document.querySelectorAll('.nav-link');
     const tabPanes = document.querySelectorAll('.tab-pane');
 
@@ -196,60 +183,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.getElementById('saveChangesButton').addEventListener('click', function () {
-    const appointmentLocation = document.getElementById('appointmentLocation').value;
-    const appointmentDescription = document.getElementById('appointmentDescription').value;
-
-    fetch(`/updateAppointment`, {
-        method: 'PATCH', // Update this line to use PATCH method
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            id: currentAppointmentId,
-            location: appointmentLocation,
-            description: appointmentDescription,
-        }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            clearAppointmentsTable();
-            fetchAppointments(localStorage.getItem('selectedGroupId'));
-            var myModal = bootstrap.Modal.getInstance(document.getElementById('appointmentDetailModal'));
-            myModal.hide();
-        })
-        .catch(error => {
-            console.error('Error updating appointment:', error);
-            alert('Failed to update appointment');
-        });
-});
-
-document.getElementById('deleteAppointmentButton').addEventListener('click', function () {
-    if (confirm('Are you sure you want to delete this appointment?')) {
-        // Assuming there's an endpoint '/Student/deleteAppointment' and appointmentId is stored globally or retrieved in another way
-        fetch(`/Student/deleteAppointment/${currentAppointmentId}`, {
-            method: 'DELETE',
-        })
-            .then(response => response.json())
-            .then(data => {
-                clearAppointmentsTable();
-                fetchAppointments(localStorage.getItem('selectedGroupId'));
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('appointmentDetailModal'));
-                myModal.hide();
-            })
-            .catch(error => {
-                console.error('Error deleting appointment:', error);
-                alert('Failed to delete appointment');
-            });
-    }
-});
-
 document.querySelector('.appointment-add-link').addEventListener('click', function (event) {
     event.preventDefault();
+    
+    const personalGroupDropdown = document.getElementById('personalGroupDropdown');
+    personalGroupDropdown.innerHTML = '<option value="">-- Chọn nhóm đề tài --</option>';
+
+    groups.forEach(group => {
+        const option = document.createElement('option');
+        option.value = group.id;
+        option.textContent = group.name;
+        personalGroupDropdown.appendChild(option);
+    });
+    const groupGroupDropdown = document.getElementById('groupGroupDropdown');
+    groupGroupDropdown.innerHTML = '<option value="">-- Chọn nhóm đề tài --</option>';
+    groups.forEach(group => {
+        const option = document.createElement('option');
+        option.value = group.id;
+        option.textContent = group.name;
+        groupGroupDropdown.appendChild(option);
+    });
+
     var myModal = new bootstrap.Modal(document.getElementById('addAppointmentModal'));
     myModal.show();
-    document.getElementById('personalGroupName').textContent = localStorage.getItem('selectedGroupName');
-    document.getElementById('groupGroupName').textContent = localStorage.getItem('selectedGroupName');
 });
 
 function populateTimeSelects() {
@@ -321,6 +277,7 @@ document.addEventListener('change', (event) => {
     }
 });
 
+/*
 document.getElementById('personalDate').addEventListener('change', function () {
     const selectedDate = this.value;
     const teacherId = localStorage.getItem('selectedGroupTeacherId'); // Đọc teacherId từ Local Storage
@@ -335,7 +292,7 @@ document.getElementById('personalDate').addEventListener('change', function () {
 document.getElementById('groupDate').addEventListener('change', function () {
     const selectedDate = this.value;
     const teacherId = localStorage.getItem('selectedGroupTeacherId'); // Đọc teacherId từ Local Storage
-    const groupId = localStorage.getItem('selectedGroupId'); // Đọc groupId từ Local Storage
+    const groupId = document.getElementById('groupGroupDropdown').options[document.getElementById('groupGroupDropdown').selectedIndex].value;
     if (selectedDate) { // Kiểm tra xem người dùng đã chọn ngày chưa
         fetchGroupFreeTimes(selectedDate, teacherId, groupId);
     } else {
@@ -343,6 +300,31 @@ document.getElementById('groupDate').addEventListener('change', function () {
         document.getElementById('groupAppointmentDetails').style.display = 'none'; // Ẩn các mục nếu người dùng xóa ngày đã chọn
     }
 });
+*/
+
+function handlePersonalSelectionChange() {
+    const groupId = document.getElementById('personalGroupDropdown').options[document.getElementById('personalGroupDropdown').selectedIndex].value;
+    const date = document.getElementById('personalDate').value;
+    const teacherId = localStorage.getItem('selectedGroupTeacherId');
+    if (date && groupId != '') { 
+        fetchPersonalFreeTimes(date, teacherId);
+    } else {
+        document.getElementById('personalFreeTimesAvailable').style.display = 'none'; // Ẩn các mục nếu người dùng xóa ngày đã chọn
+        document.getElementById('personalAppointmentDetails').style.display = 'none'; // Ẩn các mục nếu người dùng xóa ngày đã chọn
+    }
+}
+
+function handleGroupSelectionChange() {
+    const date = document.getElementById('groupDate').value;
+    const teacherId = localStorage.getItem('selectedGroupTeacherId'); // Đọc teacherId từ Local Storage
+    const groupId = document.getElementById('groupGroupDropdown').options[document.getElementById('groupGroupDropdown').selectedIndex].value;
+    if (date && groupId != '') { // Kiểm tra xem người dùng đã chọn ngày chưa
+        fetchGroupFreeTimes(date, teacherId, groupId);
+    } else {
+        document.getElementById('groupFreeTimesAvailable').style.display = 'none'; // Ẩn các mục nếu người dùng xóa ngày đã chọn
+        document.getElementById('groupAppointmentDetails').style.display = 'none'; // Ẩn các mục nếu người dùng xóa ngày đã chọn
+    }
+}
 
 function checkSelectedPersonalTimeAgainstFreeTimes() {
     let startHour = parseInt(document.getElementById('personalStartHour').value, 10);
@@ -454,13 +436,13 @@ function savePersonalAppointment() {
     const endMinute = document.getElementById('personalEndMinute').value;
     const location = document.getElementById('personalLocation').value;
     const description = document.getElementById('personalDescription').value;
-    const groupId = localStorage.getItem('selectedGroupId');
+    const groupId = document.getElementById('personalGroupDropdown').options[document.getElementById('personalGroupDropdown').selectedIndex].value;
 
     const start = `${selectedDate} ${startHour.padStart(2, '0')}:${startMinute.padStart(2, '0')}:00`;
     const end = `${selectedDate} ${endHour.padStart(2, '0')}:${endMinute.padStart(2, '0')}:00`;
 
-    if (!selectedDate || (startHour === '00' && startMinute === '00' && endHour === '00' && endMinute === '00') || document.getElementById('personalAppointmentTimeWarning').style.display === 'block') {
-        alert('Khung thời gian không hợp lệ.');
+    if (!selectedDate || (startHour === '00' && startMinute === '00' && endHour === '00' && endMinute === '00') || document.getElementById('personalAppointmentTimeWarning').style.display === 'block' || document.getElementById('personalGroupDropdown').options[document.getElementById('personalGroupDropdown').selectedIndex].value === '') {
+        alert('Khung thời gian không hợp lệ hoặc nhóm đề tài chưa được chọn.');
         return;
     }
 
@@ -480,7 +462,7 @@ function savePersonalAppointment() {
         .then(response => response.json())
         .then(data => {
             clearAppointmentsTable();
-            fetchAppointments(localStorage.getItem('selectedGroupId'));
+            loadAppointments();
             var myModal = bootstrap.Modal.getInstance(document.getElementById('addAppointmentModal'));
             myModal.hide();
             clearAppointmentsTable();
@@ -497,6 +479,7 @@ function savePersonalAppointment() {
     document.getElementById('personalLocation').value = ''; // Đặt lại địa điểm
     document.getElementById('personalDescription').value = ''; // Đặt lại mô tả
 
+
     // Ẩn cảnh báo thời gian không hợp lệ nếu nó được hiển thị
     document.getElementById('personalFreeTimesAvailable').style.display = 'none';
     document.getElementById('personalAppointmentDetails').style.display = 'none';
@@ -512,12 +495,12 @@ function saveGroupAppointment() {
     const endMinute = document.getElementById('groupEndMinute').value;
     const location = document.getElementById('groupLocation').value;
     const description = document.getElementById('groupDescription').value;
-    const groupId = localStorage.getItem('selectedGroupId');
+    const groupId = document.getElementById('groupGroupDropdown').options[document.getElementById('groupGroupDropdown').selectedIndex].value;
 
     const start = `${selectedDate} ${startHour.padStart(2, '0')}:${startMinute.padStart(2, '0')}:00`;
     const end = `${selectedDate} ${endHour.padStart(2, '0')}:${endMinute.padStart(2, '0')}:00`;
 
-    if (!selectedDate || (startHour === '00' && startMinute === '00' && endHour === '00' && endMinute === '00') || document.getElementById('groupAppointmentTimeWarning').style.display === 'block') {
+    if (!selectedDate || (startHour === '00' && startMinute === '00' && endHour === '00' && endMinute === '00') || document.getElementById('groupAppointmentTimeWarning').style.display === 'block' || document.getElementById('groupGroupDropdown').options[document.getElementById('groupGroupDropdown').selectedIndex].value === '') {
         alert('Khung thời gian không hợp lệ.');
         return;
     }
@@ -538,7 +521,7 @@ function saveGroupAppointment() {
         .then(response => response.json())
         .then(data => {
             clearAppointmentsTable();
-            fetchAppointments(localStorage.getItem('selectedGroupId'));
+            loadAppointments();
             var myModal = bootstrap.Modal.getInstance(document.getElementById('addAppointmentModal'));
             myModal.hide();
             clearAppointmentsTable();

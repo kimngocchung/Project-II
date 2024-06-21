@@ -23,33 +23,20 @@ body {
     height: 100vh; /* Đảm bảo chiều cao đầy đủ */
     width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng có sẵn */
 }
-.right-panel .navigation {
+.right-panel .navigation-bar {
     padding: 29px;
     background-color: white;
     height: 50px; /* Độ cao tổng thể bao gồm padding */
     box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
     display: flex; 
     align-items: center; 
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.right-panel .navigation .bi-list {
-    font-size: 40px;
-}
-.right-panel .navigation .bi-box-arrow-right{
+
+.right-panel .navigation-bar .bi-box-arrow-right{
     font-size: 40px;
     color:black
-}
-.link-container {
-    display: flex;
-    justify-content: flex-end; /* Đẩy liên kết sang phải */
-    padding-right: 20px; /* Khoảng cách từ lề phải */
-    padding-top: 15px; /* Khoảng cách từ phía trên */
-}
-.link{
-    text-decoration: none;
-    color: #567184;
-    font-size: 20px;
 }
 
 .custom-style {
@@ -58,4 +45,17 @@ body {
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 5px;
+}
+
+.home-link-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-top: 15px;
+}
+
+.home-link {
+    text-decoration: none;
+    color: #567184;
+    font-size: 30px;
 }

@@ -3,17 +3,28 @@ function fetchInfo() {
         .then(response => response.json())
         .then(data => {
             data.forEach(teacher => {
-            document.getElementById('teachercode').value = teacher.teachercode;
-            document.getElementById('fullname').value = teacher.fullname;
-            document.getElementById('email').value = teacher.email;
-            document.getElementById('phonenumber').value = teacher.phonenumber;
-            document.getElementById('dateofbirth').value = teacher.dob;
-            document.getElementById('password').value = teacher.password;
+                document.getElementById('teachercode').value = teacher.teachercode;
+                document.getElementById('fullname').value = teacher.fullname;
+                document.getElementById('email').value = teacher.email;
+                document.getElementById('phonenumber').value = teacher.phonenumber;
+                document.getElementById('dateofbirth').value = teacher.dob;
+                document.getElementById('password').value = teacher.password;
             });
         })
         .catch(error => {
             console.error('Error fetching appointment data:', error);
         });
+}
+
+function fetchFullname() {
+    fetch('/Teacher/getFullname')
+        .then(response => response.json())
+        .then(menu => {
+            const teacherNameView = document.getElementById('teacher-name-view');
+            teacherNameView.innerHTML = `<i class="bi bi-person-circle"></i>GV: ${menu.fullname}`;
+        })
+        .catch(error => console.error('Error fetching menu:', error));
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -38,15 +49,15 @@ document.getElementById('saveButton').addEventListener('click', function (event)
         },
         body: JSON.stringify(teacherInfo),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        showSuccessMessage('Lưu thông tin thành công');
-        // Xử lý sau khi lưu thành công, ví dụ: thông báo cho người dùng
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            showSuccessMessage('Lưu thông tin thành công');
+            // Xử lý sau khi lưu thành công, ví dụ: thông báo cho người dùng
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 });
 
 function showSuccessMessage(message) {

@@ -17,16 +17,20 @@
         <div id="menu-container"></div>
         <div class="right-panel">
             <nav class="navigation-bar">
-                <i class="bi bi-list navigation-icon"></i>
-                <a href="/" class="navigation-link"><i class="bi bi-box-arrow-right"></i></a>
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
                 <a href="" class="home-link">Danh sách nhóm đề tài</a>
             </div>
-            <div class="group-add-container">
-                <a href="" class="group-add-link">Thêm nhóm sinh viên</a>
-            </div>
             <div class="group-table-container">
+                <div class="filter-add-container">
+                    <div class="filter-container">
+                        <input type="text" id="groupFilter" placeholder="Lọc nhóm đề tài...">
+                    </div>
+                    <div class="group-add-container">
+                        <a href="" class="group-add-link"><i class="bi bi-plus-circle"></i> Tạo nhóm sinh viên</a>
+                    </div>
+                </div>
                 <table class="group-table">
                     <thead>
                         <tr>
@@ -55,6 +59,19 @@
                     <p><strong>Nhóm sinh viên:</strong> <span id="groupName"></span></p>
                     <p><strong>Tên đề tài:</strong> <span id="projectTitle"></span></p>
                     <p><strong>Nội dung đề tài:</strong> <span id="projectDescription"></span></p>
+                    <h5>Thành viên:</h5>
+                    <table id="groupMembersTable">
+                        <thead>
+                            <tr>
+                                <th>Họ và tên</th>
+                                <th>Mã số sinh viên</th>
+                                <!-- Thêm các cột khác nếu cần -->
+                            </tr>
+                        </thead>
+                        <tbody id="groupMembers">
+                            <!-- Data will be populated here dynamically -->
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -155,6 +172,13 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Teacher/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const teacherNameView = document.getElementById('teacher-name-view');
+                        teacherNameView.innerHTML = `<i class="bi bi-person-circle"></i>GV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
     </script>

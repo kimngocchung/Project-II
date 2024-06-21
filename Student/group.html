@@ -17,8 +17,7 @@
         <div id="menu-container"></div>
         <div class="right-panel">
             <nav class="navigation-bar">
-                <i class="bi bi-list navigation-icon"></i>
-                <a href="/" class="navigation-link"><i class="bi bi-box-arrow-right"></i></a>
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
                 <a href="" class="home-link">Danh sách nhóm đề tài</a>
@@ -80,6 +79,13 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Student/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const studentNameView = document.getElementById('student-name-view');
+                        studentNameView.innerHTML = `<i class="bi bi-person-circle"></i>SV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
     </script>

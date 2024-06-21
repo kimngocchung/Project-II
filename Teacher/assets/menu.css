@@ -6,7 +6,7 @@
     margin: 0;
 }
 
-.TT-link, .GV-link, .item-link {
+.GV-link, .item-link {
     text-align: left;
     text-decoration: none;
     display: flex;
@@ -16,7 +16,7 @@
     color: #fff;
 }
 
-.TT-link .bi, .GV-link .bi, .item-link .bi {
+.GV-link .bi, .item-link .bi {
     margin-right: 10px;
     font-size: 30px;
 }
@@ -31,4 +31,16 @@
 .function-list-item {
     list-style-type: none;
     padding: 0;
+}
+
+.TT-link {
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    width: 100%;
 }

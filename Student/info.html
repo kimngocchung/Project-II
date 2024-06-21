@@ -17,8 +17,7 @@
         <div id="menu-container"></div>
         <div class="right-panel">
             <nav class="navigation-bar">
-                <i class="bi bi-list navigation-icon"></i>
-                <a href="/" class="navigation-link"><i class="bi bi-box-arrow-right"></i></a>
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
                 <a href="" class="home-link">Thông tin cá nhân</a>
@@ -53,17 +52,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "row">
-                        <div class = "col">
-                            <div class = "mb-3">
-                                <label for = "class" class = "form-label">Lớp</label>
-                                <input type = "text" class = "form-control" id = "class" name = "class" required>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="class" class="form-label">Lớp</label>
+                                <input type="text" class="form-control" id="class" name="class" required>
                             </div>
                         </div>
-                        <div class = "col">
-                            <div class = "mb-3">
-                                <label for = "email" class = "form-label">Email</label>
-                                <input type = "email" class = "form-control" id = "email" name = "email" required>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                         </div>
                     </div>
@@ -89,6 +88,13 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Student/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const studentNameView = document.getElementById('student-name-view');
+                        studentNameView.innerHTML = `<i class="bi bi-person-circle"></i>SV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
     </script>

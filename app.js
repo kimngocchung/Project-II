@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session');
 const loginHandler = require(`./Login/loginHandler`);
 const connection = require(`./database/database`)
-const bodyParser = require('body-parser');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const fs = require('fs');
@@ -85,6 +84,40 @@ app.get("/Teacher/list-student", function (req, res) {
 
 app.get("/Teacher/free-time", function (req, res) {
     res.sendFile(__dirname + "/Teacher/freecalendar.html");
+});
+
+app.get("/Student/getFullname", async function (req, res) {
+    try {
+        const userId = req.userId;
+        const sql = "SELECT fullname FROM students WHERE id = ?";
+
+        connection.query(sql, [userId], function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+            res.json(results[0]);
+        });
+    } catch (error) {
+        console.error("Error retrieving student name:", error);
+        res.status(500).json({ error: "Error retrieving student name" });
+    }
+});
+
+app.get("/Teacher/getFullname", async function (req, res) {
+    try {
+        const userId = req.userId;
+        const sql = "SELECT fullname FROM teachers WHERE id = ?";
+
+        connection.query(sql, [userId], function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+            res.json(results[0]);
+        });
+    } catch (error) {
+        console.error("Error retrieving teacher name:", error);
+        res.status(500).json({ error: "Error retrieving teacher name" });
+    }
 });
 
 // Lấy danh sách cuộc hẹn với cá nhân của giảng viên
@@ -533,7 +566,19 @@ app.put("/Teacher/editGroup", async function (req, res) {
 app.get("/Teacher/home/appointments", async function (req, res) {
     try {
         const userId = req.userId; // Lấy userId của giảng viên từ session
-        const sql = "SELECT a.id, g.name AS group_name, a.type, DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only, DATE_FORMAT(a.start, '%H:%i:%s') AS start_time, DATE_FORMAT(a.end, '%H:%i:%s') AS end_time, a.location, a.status, a.description FROM appointments a JOIN assigned_projects ap ON a.group_id = ap.group_id JOIN projects p ON ap.group_id = p.id JOIN teachers t ON p.teacher_id = t.id JOIN `groups` g ON ap.group_id = g.id WHERE t.id = ? AND a.status = 'Scheduled' ORDER BY date_only ASC, start_time ASC;";
+        const sql = `
+        SELECT DISTINCT
+	        g.name AS group_name, a.type,
+	        DATE_FORMAT(a.start, '%Y-%m-%d') AS date_only,
+	        DATE_FORMAT(a.start, '%H:%i:%s') AS start_time,
+	        DATE_FORMAT(a.end, '%H:%i:%s') AS end_time,
+	        a.location, a.description
+        FROM appointments a
+        JOIN assigned_projects ap ON a.group_id = ap.group_id
+        JOIN projects p ON ap.project_id = p.id
+        JOIN teachers t ON p.teacher_id = t.id
+        JOIN \`groups\` g ON a.group_id = g.id
+        WHERE t.id = ? AND a.status = 'Scheduled' ORDER BY date_only ASC, start_time ASC;`;
 
         connection.query(sql, [userId], function (error, results, fields) {
             if (error) {

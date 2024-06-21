@@ -17,11 +17,10 @@
         <div id="menu-container"></div>
         <div class="right-panel">
             <nav class="navigation-bar">
-                <i class="bi bi-list navigation-icon"></i>
-                <a href="/" class="navigation-link"><i class="bi bi-box-arrow-right"></i></a>
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
-                <a href="" class="home-link">Danh sách lịch hẹn</a>
+                <a href="" class="home-link" id="home-link"></a>
             </div>
             <div class="appointment-table-container">
                 <div class="list-appointment">
@@ -122,6 +121,13 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Teacher/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const teacherNameView = document.getElementById('teacher-name-view');
+                        teacherNameView.innerHTML = `<i class="bi bi-person-circle"></i>GV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
     </script>

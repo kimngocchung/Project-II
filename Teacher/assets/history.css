@@ -22,20 +22,24 @@ body {
     flex-direction: column;
 }
 
-.right-panel .navigation {
-    padding: 20px;
+.right-panel {
+    flex-grow: 1;
+    background-color: #f0f0f0;
+    height: 100vh;
+    width: 100%;
+}
+
+.navigation-bar {
+    padding: 29px;
     background-color: white;
-    box-sizing: border-box; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
-.right-panel .navigation .bi-list {
-    font-size: 40px;
-}
-
-.right-panel .navigation .bi-box-arrow-right {
+.log-out {
     font-size: 40px;
     color: black;
 }
@@ -57,7 +61,8 @@ body {
     margin: 10px 25px 25px 25px;
     background: white;
     padding: 20px;
-    height: 70%;
+    height: 90%;
+    overflow-y: auto;
 }
 
 table {

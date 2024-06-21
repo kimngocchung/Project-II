@@ -1,102 +1,152 @@
 body {
     margin: 0;
     padding: 0;
-}
-
-.container {
-    display: flex; /* Thiết lập container là flex container */
-    height: 100vh; /* Đảm bảo container có chiều cao đầy đủ */
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.function-list {
-    background: linear-gradient(180deg, #D9D9D9 0%, #737373 0%, #777777 96%, #777777 96%, #737373 100%);
-    width: 250px; /* Chiều rộng cố định */
-    height: 100vh; /* Chiều cao đầy đủ */
-    padding: 0;
-    margin: 0;
-}
-
-.TT-link , .SV-link, .item-link {
-    text-align: left; /* Căn chữ và icon về bên trái */
-    text-decoration: none;
-    display: flex; /* Sử dụng flexbox để căn chỉnh */
-    align-items: center; /* Căn giữa các mục theo chiều dọc */
-    padding: 10px 15px; /* Đồng bộ padding */
-    font-size: 15px; /* Đồng bộ font-size */
-    color: #fff;
-}
-
-.TT-link .bi, .SV-link .bi, .item-link .bi {
-    margin-right: 10px; /* Khoảng cách giữa icon và chữ */
-    font-size: 30px; /* Đồng bộ kích thước icon */
-}
-
-.divider{
-    border: none;
-    height: 0.5px;
-    background-color: #ccc; /* Màu của đường kẻ */
-    margin: 0; /* Loại bỏ margin mặc định */
-}
-
-.function-list-item {
-    list-style-type: none;
-    padding: 0; /* Loại bỏ padding mặc định */
-}
-.right-panel {
-    flex-grow: 1; /* Cho phép right-panel mở rộng để chiếm phần còn lại của không gian */
-    background-color: #f0f0f0; /* Màu xám nhạt */
-    height: 100vh; /* Đảm bảo chiều cao đầy đủ */
-}
-.right-panel .navigation {
-    padding: 29px;
-    background-color: white;
-    height: 50px; /* Độ cao tổng thể bao gồm padding */
-    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+.container {
     display: flex; 
-    align-items: center; 
-    justify-content: space-between;
+    height: 100vh; 
+    max-width: 100% !important;
+    padding-right: 0 !important; 
+    padding-left: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
-.right-panel .navigation .bi-list {
-    font-size: 40px;
+.right-panel {
+    flex-grow: 1;
+    background-color: #f0f0f0;
+    height: 100vh;
+    width: 100%;
 }
-.right-panel .navigation .bi-box-arrow-right{
-    font-size: 40px;
-    color:black
-}
+
 .home-link-container {
     display: flex;
-    justify-content: flex-end; /* Đẩy liên kết sang phải */
-    padding-right: 20px; /* Khoảng cách từ lề phải */
-    padding-top: 15px; /* Khoảng cách từ phía trên */
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-top: 15px;
 }
-.home-link{
+
+.home-link {
     text-decoration: none;
     color: #567184;
     font-size: 30px;
 }
+
 .appointment-container{
-   margin:10px 25px 25px 25px; 
+    margin:10px 25px 25px 25px; 
     background: white;
     padding: 20px;
     height:70%
 }
 
-table {
+.appointment-table {
     width: 100%; /* Full width of its container */
     border-collapse: collapse; /* Collapses the border between cells */
+    border: 1px solid #ccc; /* Add a grey border */
 }
 
-th, td {
+.appointment-table th, .appointment-table td {
     border: 1px solid #ccc; /* Light grey border */
     padding: 8px; /* Padding inside cells */
     text-align: left; /* Align text to the left */
 }
 
-th {
+.appointment-table th {
     background-color: #f2f2f2; /* Light grey background for headers */
+    font-weight: bold; /* Bold font weight */
+    border: 1px solid #000;
 }
 .appointment-count {
     font-weight: bold;
+}
+
+.navigation-bar {
+    padding: 29px;
+    background-color: white;
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.log-out {
+    font-size: 40px;
+    color: black;
+}
+
+.appointment-add-container {
+    text-align: right;
+    padding-right: 20px;
+    font-size: 18px;
+}
+
+.appointment-add-link {
+    color: #000;
+    text-decoration: none;
+}
+
+.appointment-add-container a {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+.modal-body p > strong {
+    vertical-align: top;
+}
+
+#appointmentLocation {
+    vertical-align: top;
+    margin-top: -5px; /* Điều chỉnh giá trị này cho phù hợp */
+}
+
+.personal-free-times-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Khoảng cách từ các phần tử khác */
+}
+
+.personal-free-times-table th, .personal-free-times-table td {
+    border: 1px solid #ddd; /* Màu viền */
+    padding: 8px; /* Đệm cho nội dung trong th và td */
+    text-align: left; /* Căn lề trái cho nội dung */
+}
+
+.personal-free-times-table th {
+    background-color: #f8f8f8; /* Màu nền cho tiêu đề */
+    color: #333; /* Màu chữ cho tiêu đề */
+    font-weight: bold; /* Độ đậm cho chữ */
+}
+
+.group-free-times-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Khoảng cách từ các phần tử khác */
+}
+
+.group-free-times-table th, .group-free-times-table td {
+    border: 1px solid #ddd; /* Màu viền */
+    padding: 8px; /* Đệm cho nội dung trong th và td */
+    text-align: left; /* Căn lề trái cho nội dung */
+}
+
+.group-free-times-table th {
+    background-color: #f8f8f8; /* Màu nền cho tiêu đề */
+    color: #333; /* Màu chữ cho tiêu đề */
+    font-weight: bold; /* Độ đậm cho chữ */
+}
+
+label {
+    margin-top: 20px; /* Điều chỉnh giá trị này theo nhu cầu */
+}
+.time-range {
+    display: flex;
+    align-items: center; /* Căn chỉnh các phần tử theo trục dọc */
+    gap: 8px; /* Khoảng cách giữa các phần tử */
 }

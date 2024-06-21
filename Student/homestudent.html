@@ -6,31 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý lịch hẹn</title>
     <link rel="stylesheet" href="/Student/assets/homestudent.css">
+    <link rel="stylesheet" href="/Student/assets/menu.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
 </head>
 
 <body>
     <div class="container">
         <div id="menu-container"></div>
         <div class="right-panel">
-            <nav class="navigation">
-                <i class="bi bi-list"></i>
-                <a href="/"><i class="bi bi-box-arrow-right"></i></a>
+            <nav class="navigation-bar">
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
                 <a href="" class="home-link">Trang chủ</a>
             </div>
             <div class="appointment-container">
-                <div class="notification" style="font-size: 20px;">
-                    <p>Bạn có 0 lịch hẹn sắp tới</p>
+                <div class="appointment-add-container">
+                    <a href="" class="appointment-add-link"><i class="bi bi-plus-circle"></i> Tạo lịch hẹn</a>
                 </div>
-
+                <div class="notification" style="font-size: 20px;">
+                    <p>Bạn có 0 lịch hẹn sắp tới.</p>
+                </div>
                 <div class="list-appointment">
                     <p id="appointment-title">Lịch hẹn của bạn: </p>
                 </div>
 
-                <table>
+                <table class="appointment-table">
                     <tr>
                         <th>Nhóm đề tài</th>
                         <th>Loại</th>
@@ -40,8 +43,125 @@
                         <th>Địa điểm</th>
                         <th>GVHD</th>
                     </tr>
-                    <tbody></tbody>
+                    <tbody id="appointment-table-body"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="addAppointmentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm lịch hẹn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab navs -->
+                    <ul class="nav nav-tabs" id="appointmentTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="personal-appointment-tab"
+                                data-target="#personalAppointment">Lịch hẹn cá nhân</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="group-appointment-tab" data-target="#groupAppointment">Lịch hẹn
+                                nhóm</button>
+                        </li>
+                    </ul>
+                    <!-- Tab content -->
+                    <div class="tab-content" id="addAppointmentTabContent">
+                        <div class="tab-pane show active" id="personalAppointment" role="tabpanel">
+                            <form id="personalAppointmentForm" class="pt-3">
+                                <div class="mb-3">
+                                    <label for="personalGroupDropdown" class="form-label">Nhóm đề tài</label>
+                                    <select class="form-select" id="personalGroupDropdown">
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="personalDate" class="form-label">Ngày hẹn</label>
+                                    <input type="date" class="form-control" id="personalDate">
+                                </div>
+                                <div class="mb-3" id="personalFreeTimesAvailable" style="display: none;">
+                                    <label>Khung thời gian rảnh</label>
+                                    <div class="personalFreeTimesTable">
+                                        <table class="personal-free-times-table">
+                                            <tbody id="personal-free-times-body">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="personalAppointmentDetails" style="display: none;">
+                                    <label for="personalTime" class="form-label">Thời gian</label>
+                                    <div class="time-range">
+                                        <select id="personalStartHour"></select>:
+                                        <select id="personalStartMinute"></select>
+                                        -
+                                        <select id="personalEndHour"></select>:
+                                        <select id="personalEndMinute"></select>
+                                    </div>
+                                    <div class="mb-3" id="personalAppointmentTimeWarning" style="display: none;">
+                                        <label>Khung thời gian không hợp lệ. Vui lòng thay đổi.</label>
+                                    </div>
+                                    <div class="mb-3" id="personalAppointmentLocationAndDescription"
+                                        style="display: none;">
+                                        <label for="personalLocation" class="form-label">Địa điểm</label>
+                                        <textarea class="form-control" id="personalLocation" rows="1"
+                                            cols="30"></textarea>
+                                        <label for="personalDescription" class="form-label">Nội dung đề tài</label>
+                                        <textarea class="form-control" id="personalDescription" rows="4"
+                                            cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="groupAppointment" role="tabpanel">
+                            <form id="groupAppointmentForm" class="pt-3">
+                                <div class="mb-3">
+                                    <label for="groupGroupDropdown" class="form-label">Nhóm đề tài</label>
+                                    <select class="form-select" id="groupGroupDropdown">
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="groupDate" class="form-label">Ngày hẹn</label>
+                                    <input type="date" class="form-control" id="groupDate">
+                                </div>
+                                <div class="mb-3" id="groupFreeTimesAvailable" style="display: none;">
+                                    <label>Khung thời gian rảnh</label>
+                                    <div class="groupFreeTimesTable">
+                                        <table class="group-free-times-table">
+                                            <tbody id="group-free-times-body">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="groupAppointmentDetails" style="display: none;">
+                                    <label for="groupTime" class="form-label">Thời gian</label>
+                                    <div class="time-range">
+                                        <select id="groupStartHour"></select>:
+                                        <select id="groupStartMinute"></select>
+                                        -
+                                        <select id="groupEndHour"></select>:
+                                        <select id="groupEndMinute"></select>
+                                    </div>
+                                    <div class="mb-3" id="groupAppointmentTimeWarning" style="display: none;">
+                                        <label>Khung thời gian không hợp lệ. Vui lòng thay đổi.</label>
+                                    </div>
+                                    <div class="mb-3" id="groupAppointmentLocationAndDescription"
+                                        style="display: none;">
+                                        <label for="groupLocation" class="form-label">Địa điểm</label>
+                                        <textarea class="form-control" id="groupLocation" rows="1" cols="30"></textarea>
+                                        <label for="groupDescription" class="form-label">Nội dung đề tài</label>
+                                        <textarea class="form-control" id="groupDescription" rows="4"
+                                            cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveAppointmentButton">Lưu</button>
+                </div>
             </div>
         </div>
     </div>
@@ -51,41 +171,18 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Student/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const studentNameView = document.getElementById('student-name-view');
+                        studentNameView.innerHTML = `<i class="bi bi-person-circle"></i>SV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
-        
-            function loadAppointments() {
-            fetch('/Student/home/appointments')
-                .then(response => response.json())
-                .then(appointments => {
-                    const tableBody = document.querySelector('table tbody');
-                    const appointmentNotification = document.querySelector('.notification');
-
-                    // Tính toán số lượng lịch hẹn
-                    const numberOfAppointments = appointments.length;
-                    // Cập nhật nội dung của thông báo
-                    appointmentNotification.innerHTML = `<p>Bạn có <span class="appointment-count">${numberOfAppointments}</span> lịch hẹn sắp tới</p>`;
-
-                    appointments.forEach(app => {
-                        const row = `<tr>
-                    <td>${app.name}</td>
-                    <td>${app.type}</td>
-                    <td>${app.date_only}</td>
-                    <td>${app.start_time}</td>
-                    <td>${app.end_time}</td>
-                    <td>${app.location}</td>
-                    <td>${app.fullname}</td>
-                </tr>`;
-                        tableBody.innerHTML += row;
-                    });
-                })
-                .catch(error => console.error('Error fetching appointments:', error));
-        }
-
-
-        // Gọi hàm này khi trang được tải
-        document.addEventListener('DOMContentLoaded', loadAppointments);
     </script>
+    <script src="/Student/homestudent.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

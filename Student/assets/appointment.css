@@ -28,16 +28,13 @@ body {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.navigation-icon {
-    font-size: 40px;
-}
-
-.navigation-link {
+.log-out {
     font-size: 40px;
     color: black;
+    
 }
 
 .home-link-container {
@@ -61,16 +58,16 @@ body {
 
 .appointment-add-link {
     color: #000;
+    text-decoration: none;
 }
 
-.group-appointment-add-container {
-    text-align: right;
-    padding-right: 20px;
-    font-size: 18px;
-}
-
-.group-appointment-add-link {
-    color: #000;
+.appointment-add-container a {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
 }
 
 .appointment-table-container {
@@ -150,4 +147,9 @@ label {
     display: flex;
     align-items: center; /* Căn chỉnh các phần tử theo trục dọc */
     gap: 8px; /* Khoảng cách giữa các phần tử */
+}
+
+.form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
 }

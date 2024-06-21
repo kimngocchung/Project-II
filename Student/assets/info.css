@@ -28,16 +28,13 @@ body {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.navigation-icon {
-    font-size: 40px;
-}
-
-.navigation-link {
+.log-out {
     font-size: 40px;
     color: black;
+    
 }
 
 .home-link-container {

@@ -3,18 +3,28 @@ function fetchInfo() {
         .then(response => response.json())
         .then(data => {
             data.forEach(student => {
-            document.getElementById('studentcode').value = student.studentcode;
-            document.getElementById('fullname').value = student.fullname;
-            document.getElementById('email').value = student.email;
-            document.getElementById('phonenumber').value = student.phonenumber;
-            document.getElementById('dateofbirth').value = student.dob;
-            document.getElementById('class').value = student.class;
-            document.getElementById('password').value = student.password;
+                document.getElementById('studentcode').value = student.studentcode;
+                document.getElementById('fullname').value = student.fullname;
+                document.getElementById('email').value = student.email;
+                document.getElementById('phonenumber').value = student.phonenumber;
+                document.getElementById('dateofbirth').value = student.dob;
+                document.getElementById('class').value = student.class;
+                document.getElementById('password').value = student.password;
             });
         })
         .catch(error => {
             console.error('Error fetching appointment data:', error);
         });
+}
+
+function getFullname() {
+    fetch('/Student/getFullname')
+        .then(response => response.json())
+        .then(menu => {
+            const studentNameView = document.getElementById('student-name-view');
+            studentNameView.innerHTML = `<i class="bi bi-person-circle"></i>SV: ${menu.fullname}`;
+        })
+        .catch(error => console.error('Error fetching menu:', error));
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -40,15 +50,16 @@ document.getElementById('saveButton').addEventListener('click', function (event)
         },
         body: JSON.stringify(studentInfo),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        showSuccessMessage('Lưu thông tin thành công');
-        // Xử lý sau khi lưu thành công, ví dụ: thông báo cho người dùng
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            showSuccessMessage('Lưu thông tin thành công');
+            // Xử lý sau khi lưu thành công, ví dụ: thông báo cho người dùng
+            getFullname();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 });
 
 function showSuccessMessage(message) {

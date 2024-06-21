@@ -119,12 +119,13 @@
     <div class="container">
         <div id="menu-container"></div>
         <div class="right-panel">
-            <div class="navigation">
-                <i class="bi bi-list"></i>
-                <a href="/"><i class="bi bi-box-arrow-right"></i></a>
+            <div class="navigation-bar">
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+            <div class="home-link-container">
+                <a href="" class="home-link">Danh sách sinh viên</a>
             </div>
             <div class="appointment-container">
-                <h1>Danh sách sinh viên</h1>
                 <table id="studentTable">
                     <thead>
                         <tr>
@@ -168,7 +169,22 @@
         <div id="studentDetails"></div>
     </div>
 </div>
-
+<script>
+    // Load menu.html into the menu-container div using fetch
+    fetch('menu.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('menu-container').innerHTML = data;
+            fetch('/Teacher/getFullname')
+                .then(response => response.json())
+                .then(menu => {
+                    const teacherNameView = document.getElementById('teacher-name-view');
+                    teacherNameView.innerHTML = `<i class="bi bi-person-circle"></i>GV: ${menu.fullname}`;
+                })
+                .catch(error => console.error('Error fetching menu:', error));
+        })
+        .catch(error => console.error('Error fetching menu:', error));
+</script>
     <script src="/Teacher/liststudent.js"></script>
 </body>
 </html>

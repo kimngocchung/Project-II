@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý lịch hẹn</title>
     <link rel="stylesheet" href="/Teacher/assets/hometeacher.css">
+    <link rel="stylesheet" href="/Teacher/assets/menu.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -14,9 +15,8 @@
     <div class="container">
         <div id="menu-container"></div>
         <div class="right-panel">
-            <nav class="navigation">
-                <i class="bi bi-list"></i>
-                <a href="/"><i class="bi bi-box-arrow-right"></i></a>
+            <nav class="navigation-bar">
+                <a href="/" class="log-out"><i class="bi bi-box-arrow-right"></i></a>
             </nav>
             <div class="home-link-container">
                 <a href="" class="home-link">Trang chủ</a>
@@ -50,6 +50,13 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('menu-container').innerHTML = data;
+                fetch('/Teacher/getFullname')
+                    .then(response => response.json())
+                    .then(menu => {
+                        const teacherNameView = document.getElementById('teacher-name-view');
+                        teacherNameView.innerHTML = `<i class="bi bi-person-circle"></i>GV: ${menu.fullname}`;
+                    })
+                    .catch(error => console.error('Error fetching menu:', error));
             })
             .catch(error => console.error('Error fetching menu:', error));
 

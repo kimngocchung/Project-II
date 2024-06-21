@@ -79,6 +79,11 @@ function fetchGroupAppointments(groupId) {
 let currentAppointmentId = null;
 
 document.addEventListener('DOMContentLoaded', function () {
+    const groupName = localStorage.getItem('selectedGroupName'); // Đọc groupName từ Local Storage
+    const homeLink = document.getElementById('home-link');
+    if (homeLink) {
+        homeLink.textContent = `${groupName} / Danh sách lịch hẹn`;
+    }
     const groupId = localStorage.getItem('selectedGroupId'); // Đọc groupId từ Local Storage
     if (groupId) {
         fetchPersonalAppointments(groupId);
